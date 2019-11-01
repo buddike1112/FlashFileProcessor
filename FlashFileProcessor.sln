@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashFileProcessor.Service", "FlashFileProcessor\FlashFileProcessor.Service.csproj", "{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{C84072D3-FB80-4E20-AD14-CF92B52F1BF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{36713810-4D17-4C10-9FA7-457B2259DEDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashFileProcessor.ServiceTests", "Tests\FlashFileProcessor.ServiceTests\FlashFileProcessor.ServiceTests.csproj", "{05A2111D-9C55-4033-A8C3-5F31B590C8F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{7261CD71-E878-4F01-B1FC-59DAA038BDE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A2111D-9C55-4033-A8C3-5F31B590C8F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A2111D-9C55-4033-A8C3-5F31B590C8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A2111D-9C55-4033-A8C3-5F31B590C8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A2111D-9C55-4033-A8C3-5F31B590C8F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0} = {C84072D3-FB80-4E20-AD14-CF92B52F1BF3}
+		{05A2111D-9C55-4033-A8C3-5F31B590C8F5} = {36713810-4D17-4C10-9FA7-457B2259DEDF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {277FDC11-4FC3-4601-8645-E77E3AD9B2B3}
+	EndGlobalSection
+EndGlobal
