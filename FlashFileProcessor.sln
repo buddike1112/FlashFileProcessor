@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashFileProcessor.Service", "FlashFileProcessor\FlashFileProcessor.Service.csproj", "{F5CAD87C-866A-4985-ACEE-2C1FB92CB7B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{C84072D3-FB80-4E20-AD14-CF92B52F1BF3}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{36713810-4D17-4C10-9FA7-457B2259DEDF}"
 EndProject
