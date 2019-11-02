@@ -8,18 +8,36 @@ using System.Threading.Tasks;
 
 namespace FlashFileProcessor.Service.Helpers
 {
+   /// <summary>
+   /// File Processor Service
+   /// </summary>
+   /// <seealso cref="FlashFileProcessor.Service.Interfaces.IFileProcessorService" />
    public class FileProcessorService : IFileProcessorService
    {
+      /// <summary>
+      /// The files options
+      /// </summary>
       private FilesOptions filesOptions;
 
+      /// <summary>
+      /// The file helper instance
+      /// </summary>
       private IFileHelper fileHelperInstance;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="FileProcessorService"/> class.
+      /// </summary>
+      /// <param name="files">The files.</param>
+      /// <param name="fileHelper">The file helper instance.</param>
       public FileProcessorService(IOptionsMonitor<FilesOptions> files, IFileHelper fileHelper)
       {
          filesOptions = files.CurrentValue;
          fileHelperInstance = fileHelper;
       }
 
+      /// <summary>
+      /// Processes the files asynchronous.
+      /// </summary>
       public async Task ProcessFilesAsync()
       {
          try

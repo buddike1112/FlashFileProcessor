@@ -13,13 +13,17 @@ namespace FlashFileProcessor
 {
    class Program
    {
+      /// <summary>Defines the entry point of the application.</summary>
+      /// <param name="args">The arguments.</param>
       static void Main(string[] args)
       {
+         // Use appsettings json file from root to read configurations
          var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true)
                 .Build();
 
+         // Inject dependencies we are using withing the hosted service
          var builder = new HostBuilder()
             .ConfigureServices((hostContext, services) =>
             {
@@ -35,6 +39,7 @@ namespace FlashFileProcessor
                services.AddMvcCore();
             });
 
+         // Pump service details to the service using Topshelf configurations
          builder.RunAsTopshelfService(hc =>
          {
             hc.SetServiceName("Flash File Processor Service");

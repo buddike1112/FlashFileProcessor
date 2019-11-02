@@ -10,12 +10,35 @@ using System.Threading.Tasks;
 
 namespace FlashFileProcessor.Service.Helpers
 {
+   /// <summary>
+   /// Validator class
+   /// </summary>
+   /// <seealso cref="FlashFileProcessor.Service.Interfaces.IValidator" />
    public class Validator : IValidator
    {
+      /// <summary>
+      /// The rules list
+      /// </summary>
       private List<Rule> rulesList = new List<Rule>();
+
+      /// <summary>
+      /// The files options
+      /// </summary>
       private FilesOptions filesOptions;
+
+      /// <summary>
+      /// Gets or sets the columns list.
+      /// </summary>
+      /// <value>
+      /// The columns list according to the file specifications.
+      /// </value>
       private string[] columnsList { get; set; }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Validator"/> class.
+      /// </summary>
+      /// <param name="files">The files.</param>
+      /// <param name="ruleProcessor">The rule processor.</param>
       public Validator(IOptionsMonitor<FilesOptions> files, IRuleProcessor ruleProcessor)
       {
          filesOptions = files.CurrentValue;
@@ -23,6 +46,13 @@ namespace FlashFileProcessor.Service.Helpers
          rulesList = ruleProcessor.GetRules();
       }
 
+      /// <summary>
+      /// Processes the line items.
+      /// </summary>
+      /// <param name="lineItems">This method will process each field entry agains the rule being configured.</param>
+      /// <returns>
+      /// ValidatedResult
+      /// </returns>
       public async Task<ValidatedResult> ProcessLineItems(string[] lineItems)
       {
          bool isValid = false;
@@ -60,6 +90,14 @@ namespace FlashFileProcessor.Service.Helpers
          return validatedResult;
       }
 
+      /// <summary>
+      /// Validates the specific input with appropriate regular expression.
+      /// </summary>
+      /// <param name="regExpression">The reg expression.</param>
+      /// <param name="input">The input.</param>
+      /// <returns>
+      /// boolean
+      /// </returns>
       public Task<bool> ValidateAsync(string regExpression, string input)
       {
          Regex rx = new Regex(regExpression);

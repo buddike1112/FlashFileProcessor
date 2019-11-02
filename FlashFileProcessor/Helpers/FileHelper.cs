@@ -11,17 +11,44 @@ using System.Threading.Tasks;
 
 namespace FlashFileProcessor.Service.Helpers
 {
+   /// <summary>
+   /// File Helper class
+   /// </summary>
+   /// <seealso cref="FlashFileProcessor.Service.Interfaces.IFileHelper" />
    public class FileHelper : IFileHelper
    {
+      /// <summary>
+      /// Gets or sets the validator.
+      /// </summary>
+      /// <value>
+      /// The validator instance.
+      /// </value>
       public IValidator _validator { get; set; }
+
+      /// <summary>
+      /// The files options
+      /// </summary>
       private FilesOptions filesOptions;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="FileHelper"/> class.
+      /// </summary>
+      /// <param name="files">The files.</param>
+      /// <param name="validator">The validator.</param>
       public FileHelper(IOptionsMonitor<FilesOptions> files, IValidator validator)
       {
          _validator = validator;
          filesOptions = files.CurrentValue;
       }
 
+      /// <summary>
+      /// Creates the file asynchronous.
+      /// </summary>
+      /// <param name="fileName">Name of the file.</param>
+      /// <param name="fileContent">Contents to write.</param>
+      /// <returns>
+      /// boolean
+      /// </returns>
       public async Task<bool> CreateFileAsync(string fileName, List<string> fileContent)
       {
          bool isFileCreated = false;
@@ -44,6 +71,12 @@ namespace FlashFileProcessor.Service.Helpers
          return isFileCreated;
       }
 
+      /// <summary>
+      /// Moves the file asynchronous.
+      /// </summary>
+      /// <param name="sourceFile">The source file.</param>
+      /// <param name="destinationFile">The destination file.</param>
+      /// <returns>boolean</returns>
       public async Task<bool> MoveFileAsync(string sourceFile, string destinationFile)
       {
          bool isFileMoved = false;
@@ -64,6 +97,11 @@ namespace FlashFileProcessor.Service.Helpers
          return isFileMoved;
       }
 
+      /// <summary>
+      /// Creates the folder.
+      /// </summary>
+      /// <param name="folderPath">The folder path.</param>
+      /// <returns>boolean</returns>
       private bool CreateFolder(string folderPath)
       {
          if (!Directory.Exists(folderPath))
@@ -82,6 +120,11 @@ namespace FlashFileProcessor.Service.Helpers
          return true;
       }
 
+      /// <summary>
+      /// Reads the file.
+      /// </summary>
+      /// <param name="fileName">Name of the file.</param>
+      /// <returns>ValidatedResultSet</returns>
       public async Task<ValidatedResultSet> ReadFile(string fileName)
       {
          ValidatedResultSet result = new ValidatedResultSet();
