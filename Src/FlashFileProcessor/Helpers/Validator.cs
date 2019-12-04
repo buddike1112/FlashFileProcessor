@@ -19,12 +19,12 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The rules list
       /// </summary>
-      private List<Rule> rulesList = new List<Rule>();
+      private readonly List<Rule> RulesList = new List<Rule>();
 
       /// <summary>
       /// The files options
       /// </summary>
-      private FilesOptions filesOptions;
+      private readonly FilesOptions filesOptions;
 
       /// <summary>
       /// Gets or sets the columns list.
@@ -32,7 +32,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <value>
       /// The columns list according to the file specifications.
       /// </value>
-      private string[] columnsList { get; set; }
+      private string[] ColumnsList { get; set; }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="Validator"/> class.
@@ -42,8 +42,8 @@ namespace FlashFileProcessor.Service.Helpers
       public Validator(IOptionsMonitor<FilesOptions> files, IRuleProcessor ruleProcessor)
       {
          filesOptions = files.CurrentValue;
-         columnsList = filesOptions.Columns;
-         rulesList = ruleProcessor.GetRules();
+         ColumnsList = filesOptions.Columns;
+         RulesList = ruleProcessor.GetRules();
       }
 
       /// <summary>
@@ -63,11 +63,11 @@ namespace FlashFileProcessor.Service.Helpers
          {
             for (int i = 0; i < lineItems.Length; i++)
             {
-               isValid = await ValidateAsync(rulesList[i].ExpressonToUse, lineItems[i]);
+               isValid = await ValidateAsync(RulesList[i].ExpressonToUse, lineItems[i]);
 
                if (!isValid)
                {
-                  rejectReasons.Add(rulesList[i].RejectReason);
+                  rejectReasons.Add(RulesList[i].RejectReason);
                }
             }
 

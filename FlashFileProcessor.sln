@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{36713810
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlashFileProcessor.ServiceTests", "Tests\FlashFileProcessor.ServiceTests\FlashFileProcessor.ServiceTests.csproj", "{05A2111D-9C55-4033-A8C3-5F31B590C8F5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{7261CD71-E878-4F01-B1FC-59DAA038BDE6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
