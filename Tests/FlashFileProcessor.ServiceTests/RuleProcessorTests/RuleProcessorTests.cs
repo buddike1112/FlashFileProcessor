@@ -47,5 +47,18 @@ namespace FlashFileProcessor.ServiceTests.RuleProcessorTests
          rule.Field.Should().NotBeNullOrEmpty();
          rule.RejectReason.Should().Be(rejectReason);
       }
+
+      [Fact]
+      public void ValidateOnGettingAllRules()
+      {
+         // Arrange
+
+         // Act
+         List<Rule> actualRules = rules.GetRules();
+
+         // Assert
+         actualRules.Should().NotBeNull();
+         actualRules.Count.Should().BeGreaterThan(0);
+      }
    }
 }
