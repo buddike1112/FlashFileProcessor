@@ -14,11 +14,8 @@ namespace FlashFileProcessor.ServiceTests.ValidatorTests
    public class ValidatorTests
    {
       private IFixture Fixture { get; } = new Fixture();
-
       public IOptionsMonitor<FilesOptions> files { get; set; }
-
       public IRuleProcessor rules { get; set; }
-
       public IValidator validator { get; set; }
 
       public ValidatorTests()

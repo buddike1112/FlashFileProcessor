@@ -27,6 +27,6 @@ namespace FlashFileProcessor.Service.Options
       /// <value>
       /// The validations that will be use while using the profile.
       /// </value>
-      public string Validations { get; set; }
+      public string[] Validations { get; set; }
    }
 }

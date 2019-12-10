@@ -44,9 +44,9 @@ namespace FlashFileProcessor.Service.Helpers
       /// </returns>
       public Rule GetRule(string fieldName)
       {
-         return fieldsArray.Select(x =>
-         string.Equals(x.ToString().Split(";")[0], fieldName) ?
-         new Rule() { Field = x.ToString().Split(";")[0], ExpressonToUse = x.ToString().Split(";")[1], RejectReason = x.ToString().Split(";")[2] } : null).FirstOrDefault();
+         return fieldsArray.Select(x => new Rule() { Field = x.ToString().Split(";")[0], ExpressonToUse = x.ToString().Split(";")[1], RejectReason = x.ToString().Split(";")[2] })
+            .FirstOrDefault(x => string.Equals(x.Field, fieldName));
+
       }
 
       /// <summary>
