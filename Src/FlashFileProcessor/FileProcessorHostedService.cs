@@ -1,5 +1,6 @@
 ﻿using FlashFileProcessor.Service.Interfaces;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,20 +22,26 @@ namespace FlashFileProcessor.Service
       private Timer _timer;
 
       /// <summary>
+      /// The logger
+      /// </summary>
+      private readonly ILogger _logger;         
+
+      /// <summary>
       /// Gets or sets the file processor service.
       /// </summary>
       /// <value>
       /// The file processor service.
       /// </value>
-      private IFileProcessorService fileProcessorService { get; set; }
+         private IFileProcessorService fileProcessorService { get; set; }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="FileProcessorHostedService"/> class.
       /// </summary>
       /// <param name="fileProcessorInstance">The file processor instance.</param>
-      public FileProcessorHostedService(IFileProcessorService fileProcessorInstance)
+      public FileProcessorHostedService(IFileProcessorService fileProcessorInstance, ILogger<FileProcessorHostedService> logger)
       {
          fileProcessorService = fileProcessorInstance;
+         _logger = logger;
       }
 
       /// <summary>
@@ -44,6 +51,7 @@ namespace FlashFileProcessor.Service
       /// <returns></returns>
       public Task StartAsync(CancellationToken cancellationToken)
       {
+         _logger.LogInformation("Start Processing files");
          _timer = new Timer(
                  async (e) => await fileProcessorService.ProcessFilesAsync(),
                  null,
@@ -61,6 +69,7 @@ namespace FlashFileProcessor.Service
       /// <returns></returns>
       public Task StopAsync(CancellationToken cancellationToken)
       {
+         _logger.LogInformation("Stop Processing files");
          _timer?.Change(Timeout.Infinite, 0);
 
          return Task.CompletedTask;

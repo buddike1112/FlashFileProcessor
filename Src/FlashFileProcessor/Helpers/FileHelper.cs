@@ -1,6 +1,7 @@
 ﻿using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Models;
 using FlashFileProcessor.Service.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -31,14 +32,20 @@ namespace FlashFileProcessor.Service.Helpers
       private FilesOptions filesOptions;
 
       /// <summary>
+      /// The logger
+      /// </summary>
+      private readonly ILogger<FileHelper> _logger;
+
+      /// <summary>
       /// Initializes a new instance of the <see cref="FileHelper"/> class.
       /// </summary>
       /// <param name="files">The files.</param>
       /// <param name="validator">The validator.</param>
-      public FileHelper(IOptionsMonitor<FilesOptions> files, IValidator validator)
+      public FileHelper(IOptionsMonitor<FilesOptions> files, IValidator validator, ILogger<FileHelper> logger)
       {
          _validator = validator;
          filesOptions = files.CurrentValue;
+         _logger = logger;
       }
 
       /// <summary>
@@ -65,7 +72,7 @@ namespace FlashFileProcessor.Service.Helpers
          }
          catch (Exception ex)
          {
-            Console.WriteLine($"CreateFileAsync -> Unable to create file : {ex.Message}");
+            _logger.LogInformation($"CreateFileAsync -> Unable to create file : {ex.Message}");
          }
 
          return isFileCreated;
@@ -90,7 +97,7 @@ namespace FlashFileProcessor.Service.Helpers
             }
             catch (Exception ex)
             {
-               Console.WriteLine($"MoveFileAsync -> Unable to move file : {ex.Message}");
+               _logger.LogInformation($"MoveFileAsync -> Unable to move file : {ex.Message}");
             }
          }
 
@@ -112,7 +119,7 @@ namespace FlashFileProcessor.Service.Helpers
             }
             catch (Exception ex)
             {
-               Console.WriteLine($"CreateFolder -> Unable to create Folder : {ex.Message}");
+               _logger.LogInformation($"CreateFolder -> Unable to create Folder : {ex.Message}");
                return false;
             }
          }
@@ -159,14 +166,14 @@ namespace FlashFileProcessor.Service.Helpers
          }
          catch (Exception ex)
          {
-            Console.WriteLine($"Error occurred in ReadFile : {ex.Message}");
+            _logger.LogInformation($"Error occurred in ReadFile : {ex.Message}");
          }
 
          stopwatch.Stop();
          measurement.ElapsedTime = stopwatch.ElapsedMilliseconds;
          measurement.MethodName = "ReadFile";
 
-         Console.WriteLine($"Time sonsumed : {measurement.ElapsedTime}");
+         _logger.LogInformation($"Time sonsumed : {measurement.ElapsedTime}");
 
          return result;
       }

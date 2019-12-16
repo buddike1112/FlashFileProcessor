@@ -1,12 +1,13 @@
 ﻿using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Models;
 using FlashFileProcessor.Service.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FlashFileProcessor.Service.Helpers
+namespace FlashFileProcessor.Service.Services
 {
    /// <summary>
    /// File Processor Service
@@ -20,6 +21,11 @@ namespace FlashFileProcessor.Service.Helpers
       private FilesOptions filesOptions;
 
       /// <summary>
+      /// The logger
+      /// </summary>
+      private readonly ILogger _logger;
+
+      /// <summary>
       /// The file helper instance
       /// </summary>
       private IFileHelper fileHelperInstance;
@@ -29,10 +35,11 @@ namespace FlashFileProcessor.Service.Helpers
       /// </summary>
       /// <param name="files">The files.</param>
       /// <param name="fileHelper">The file helper instance.</param>
-      public FileProcessorService(IOptionsMonitor<FilesOptions> files, IFileHelper fileHelper)
+      public FileProcessorService(IOptionsMonitor<FilesOptions> files, IFileHelper fileHelper, ILogger<FileProcessorService> logger)
       {
          filesOptions = files.CurrentValue;
          fileHelperInstance = fileHelper;
+         _logger = logger;
       }
 
       /// <summary>
@@ -51,44 +58,44 @@ namespace FlashFileProcessor.Service.Helpers
 
             if (File.Exists(importFile))
             {
-               Console.WriteLine($"Reading File : {importFile}");
+               _logger.LogInformation($"Reading File : {importFile}");
                ValidatedResultSet resultSetToWrite = await fileHelperInstance.ReadFile(importFile);
 
                if (resultSetToWrite.SuccessItemsList.Count > 0)
                {
-                  Console.WriteLine($"Writing successful Items to file : {processedFile} \n");
+                  _logger.LogInformation($"Writing successful Items to file : {processedFile} \n");
                   isProcessedFileCreated = await fileHelperInstance.CreateFileAsync(processedFile, resultSetToWrite.SuccessItemsList);
                }
                else
                {
-                  Console.WriteLine("No succesful records to process");
+                  _logger.LogInformation("No succesful records to process");
                }
 
                if (resultSetToWrite.FailureItemsList.Count > 0)
                {
-                  Console.WriteLine($"\n Writing rejected Items to file : {rejectedFile} \n");
+                  _logger.LogInformation($"\n Writing rejected Items to file : {rejectedFile} \n");
                   isRejectedFileCreated = await fileHelperInstance.CreateFileAsync(rejectedFile, resultSetToWrite.FailureItemsList);
                }
                else
                {
-                  Console.WriteLine("No failure records to process");
+                  _logger.LogInformation("No failure records to process");
                }
 
                if (isProcessedFileCreated && isRejectedFileCreated)
                {
-                  Console.WriteLine("Success and Failure records files generated moving original file to Archive.");
+                  _logger.LogInformation("Success and Failure records files generated moving original file to Archive.");
 
                   await fileHelperInstance.MoveFileAsync(importFile, destinationFile);
                }
             }
             else
             {
-               Console.WriteLine("Waiting for Campaign File for today!");
+               _logger.LogInformation("Waiting for Campaign File for today!");
             }
          }
          catch (Exception ex)
          {
-            Console.WriteLine($"Error occurred in ProcessFilesAsync : {ex.Message}");
+            _logger.LogInformation($"Error occurred in ProcessFilesAsync : {ex.Message}");
          }
       }
    }

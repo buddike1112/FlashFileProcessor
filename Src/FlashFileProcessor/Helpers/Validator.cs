@@ -1,6 +1,7 @@
 ﻿using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Models;
 using FlashFileProcessor.Service.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,11 @@ namespace FlashFileProcessor.Service.Helpers
       private readonly List<Rule> RulesList = new List<Rule>();
 
       /// <summary>
+      /// The logger
+      /// </summary>
+      private readonly ILogger<Validator> _logger;
+
+      /// <summary>
       /// The files options
       /// </summary>
       private readonly FilesOptions filesOptions;
@@ -39,11 +45,12 @@ namespace FlashFileProcessor.Service.Helpers
       /// </summary>
       /// <param name="files">The files.</param>
       /// <param name="ruleProcessor">The rule processor.</param>
-      public Validator(IOptionsMonitor<FilesOptions> files, IRuleProcessor ruleProcessor)
+      public Validator(IOptionsMonitor<FilesOptions> files, IRuleProcessor ruleProcessor, ILogger<Validator> logger)
       {
          filesOptions = files.CurrentValue;
          ColumnsList = filesOptions.Columns;
          RulesList = ruleProcessor.GetRules();
+         _logger = logger;
       }
 
       /// <summary>
@@ -84,7 +91,7 @@ namespace FlashFileProcessor.Service.Helpers
          }
          catch (Exception ex)
          {
-            Console.WriteLine($"Error occurred in ProcessLineItems : {ex.Message}");
+            _logger.LogInformation($"Error occurred in ProcessLineItems : {ex.Message}");
          }
 
          return validatedResult;

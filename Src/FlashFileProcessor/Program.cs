@@ -2,9 +2,11 @@
 using FlashFileProcessor.Service.Helpers;
 using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Options;
+using FlashFileProcessor.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using Topshelf.Extensions.Hosting;
@@ -28,6 +30,10 @@ namespace FlashFileProcessor
             .ConfigureServices((hostContext, services) =>
             {
                services.AddOptions();
+               services.AddLogging(logging => {
+                  logging.ClearProviders();
+                  logging.AddConsole();
+               });
 
                services.Configure<FilesOptions>(config.GetSection("files"));
                services.Configure<ProfilesOptions>(config.GetSection("profiles"));
