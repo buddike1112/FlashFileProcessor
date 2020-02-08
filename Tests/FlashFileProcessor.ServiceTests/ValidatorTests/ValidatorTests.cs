@@ -3,6 +3,7 @@ using FlashFileProcessor.Service.Helpers;
 using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Options;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NSubstitute;
@@ -17,19 +18,21 @@ namespace FlashFileProcessor.ServiceTests.ValidatorTests
       public IOptionsMonitor<FilesOptions> files { get; set; }
       public IRuleProcessor rules { get; set; }
       public IValidator validator { get; set; }
+      public ILogger _logger { get; set; }
 
       public ValidatorTests()
       {
          FilesOptions fileOptions = new FilesOptions() { Columns = new string[] { "" } };
          files = Mock.Of<IOptionsMonitor<FilesOptions>>(_ => _.CurrentValue == fileOptions);
+         _logger = Substitute.For<ILogger<Validator>>();
          rules = Substitute.For<IRuleProcessor>();
-         Fixture.Register<IValidator>(() => Substitute.For<Validator>(files, rules));
+         Fixture.Register<IValidator>(() => Substitute.For<Validator>(files, rules, _logger));
          validator = Fixture.Create<IValidator>();
       }
 
       [Theory]
       [InlineData("^+[0-9]*$", "0123456789")]
-      [InlineData("^[0-9]{3}$", "123")]      
+      [InlineData("^[0-9]{3}$", "123")]
       public void CheckProcessingOfValidateAsyncMethodForValidItems(string regExpression, string input)
       {
          // Arrange

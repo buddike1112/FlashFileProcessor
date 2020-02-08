@@ -4,6 +4,7 @@ using FlashFileProcessor.Service.Interfaces;
 using FlashFileProcessor.Service.Models;
 using FlashFileProcessor.Service.Options;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NSubstitute;
@@ -19,16 +20,19 @@ namespace FlashFileProcessor.ServiceTests.RuleProcessorTests
       private IFixture Fixture { get; } = new Fixture();
       public IOptionsMonitor<FilesOptions> files { get; set; }
       public IRuleProcessor rules { get; set; }
+      public ILogger _logger { get; set; }
 
       public RuleProcessorTests()
       {
-         FilesOptions fileOptions = new FilesOptions() { 
+         FilesOptions fileOptions = new FilesOptions()
+         {
             Columns = new string[] { "PhoneNumber;^+[0-9]*$;Invalid Phone Number", "AccountNumber;^[0-9]{3}$;Invalid Account Number" },
             Profiles = new ProfilesOptions[] { new ProfilesOptions() { Name = "AProf01", Validations = new string[] { "PhoneNumber", "AccountNumber" } } }
-         
          };
+
+         _logger = Substitute.For<ILogger<RuleProcessor>>();
          files = Mock.Of<IOptionsMonitor<FilesOptions>>(_ => _.CurrentValue == fileOptions);
-         Fixture.Register<IRuleProcessor>(() => Substitute.For<RuleProcessor>(files));
+         Fixture.Register<IRuleProcessor>(() => Substitute.For<RuleProcessor>(files, _logger));
          rules = Fixture.Create<IRuleProcessor>();
       }
 
