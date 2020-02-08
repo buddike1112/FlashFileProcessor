@@ -13,7 +13,12 @@ Basic Functionality:
 --------------------
 
 1. Read options from appsettings.json using IOption pattern 2.
-2. Check whether specific file type available in a configured folder 3.If available check each and every field with given rule 4.Seperate successfully validated items and failed items 5.Write successful items into seperate file in different destination folder 6.Write failed items into seperate file in different rejection folder 7.Provide one or more reasons for the failure of each record, reasons were configurable
+2. Check whether specific file type available in a configured folder.
+3. If available check each and every field with given rule.
+4. Seperate successfully validated items and failed items.
+5. Write successful items into seperate file in different destination folder.
+6. Write failed items into seperate file in different rejection folder. 
+7.Provide one or more reasons for the failure of each record, reasons were configurable
 
 Version History:
 ----------------
