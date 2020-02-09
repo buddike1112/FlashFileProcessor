@@ -13,11 +13,11 @@ using Topshelf.Extensions.Hosting;
 
 namespace FlashFileProcessor
 {
-   class Program
+   internal class Program
    {
       /// <summary>Defines the entry point of the application.</summary>
       /// <param name="args">The arguments.</param>
-      static void Main(string[] args)
+      private static void Main(string[] args)
       {
          // Use appsettings json file from root to read configurations
          var config = new ConfigurationBuilder()
@@ -30,7 +30,8 @@ namespace FlashFileProcessor
             .ConfigureServices((hostContext, services) =>
             {
                services.AddOptions();
-               services.AddLogging(logging => {
+               services.AddLogging(logging =>
+               {
                   logging.ClearProviders();
                   logging.AddConsole();
                });

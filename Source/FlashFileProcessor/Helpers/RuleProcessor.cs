@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -24,7 +25,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The fields array
       /// </summary>
-      string[] fieldsArray = new string[] { };
+      private string[] fieldsArray = new string[] { };
 
       /// <summary>
       /// The logger
@@ -54,7 +55,6 @@ namespace FlashFileProcessor.Service.Helpers
          _logger.LogInformation($"Getting Rule for field name : {fieldName}");
          return fieldsArray.Select(x => new Rule() { Field = x.ToString().Split(";")[0], ExpressonToUse = x.ToString().Split(";")[1], RejectReason = x.ToString().Split(";")[2] })
             .FirstOrDefault(x => string.Equals(x.Field, fieldName));
-
       }
 
       /// <summary>

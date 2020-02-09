@@ -37,6 +37,14 @@ namespace FlashFileProcessor.Service.Helpers
       private readonly ILogger<FileHelper> _logger;
 
       /// <summary>
+      /// Gets or sets the watcher.
+      /// </summary>
+      /// <value>
+      /// The watcher.
+      /// </value>
+      public Stopwatch watcher { get; set; }
+
+      /// <summary>
       /// Initializes a new instance of the <see cref="FileHelper"/> class.
       /// </summary>
       /// <param name="files">The files.</param>
@@ -58,6 +66,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// </returns>
       public async Task<bool> CreateFileAsync(string fileName, List<string> fileContent)
       {
+         watcher = Stopwatch.StartNew();
          bool isFileCreated = false;
 
          try
@@ -75,6 +84,10 @@ namespace FlashFileProcessor.Service.Helpers
             _logger.LogInformation($"CreateFileAsync -> Unable to create file : {ex.Message}");
          }
 
+         watcher.Stop();
+
+         _logger.LogInformation($"Time consumed for creating file : {fileName} : {watcher.ElapsedMilliseconds} milliseconds");
+
          return isFileCreated;
       }
 
@@ -86,6 +99,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <returns>boolean</returns>
       public async Task<bool> MoveFileAsync(string sourceFile, string destinationFile)
       {
+         watcher = Stopwatch.StartNew();
          bool isFileMoved = false;
 
          if (File.Exists(sourceFile))
@@ -101,6 +115,10 @@ namespace FlashFileProcessor.Service.Helpers
             }
          }
 
+         watcher.Stop();
+
+         _logger.LogInformation($"Time consumed for moving file : {sourceFile} : {watcher.ElapsedMilliseconds} milliseconds");
+
          return isFileMoved;
       }
 
@@ -111,6 +129,8 @@ namespace FlashFileProcessor.Service.Helpers
       /// <returns>boolean</returns>
       private bool CreateFolder(string folderPath)
       {
+         watcher = Stopwatch.StartNew();
+
          if (!Directory.Exists(folderPath))
          {
             try
@@ -123,6 +143,10 @@ namespace FlashFileProcessor.Service.Helpers
                return false;
             }
          }
+
+         watcher.Stop();
+
+         _logger.LogInformation($"Time consumed for Creating directory : {folderPath} : {watcher.ElapsedMilliseconds} milliseconds");
 
          return true;
       }
@@ -137,9 +161,8 @@ namespace FlashFileProcessor.Service.Helpers
          ValidatedResultSet result = new ValidatedResultSet();
          result.SuccessItemsList = new List<string>();
          result.FailureItemsList = new List<string>();
-         Measurement measurement = new Measurement();
-         Stopwatch stopwatch;
-         stopwatch = Stopwatch.StartNew();
+
+         watcher = Stopwatch.StartNew();
 
          try
          {
@@ -167,11 +190,9 @@ namespace FlashFileProcessor.Service.Helpers
             _logger.LogInformation($"Error occurred in ReadFile : {ex.Message}");
          }
 
-         stopwatch.Stop();
-         measurement.ElapsedTime = stopwatch.ElapsedMilliseconds;
-         measurement.MethodName = "ReadFile";
+         watcher.Stop();
 
-         _logger.LogInformation($"Time sonsumed : {measurement.ElapsedTime}");
+         _logger.LogInformation($"Time consumed for Reading file : {fileName} : {watcher.ElapsedMilliseconds} milliseconds");
 
          return result;
       }
