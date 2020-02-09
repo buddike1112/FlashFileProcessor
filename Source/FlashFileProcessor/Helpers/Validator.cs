@@ -42,14 +42,6 @@ namespace FlashFileProcessor.Service.Helpers
       private string[] ColumnsList { get; set; }
 
       /// <summary>
-      /// Gets or sets the watcher.
-      /// </summary>
-      /// <value>
-      /// The watcher.
-      /// </value>
-      public Stopwatch watcher { get; set; }
-
-      /// <summary>
       /// Initializes a new instance of the <see cref="Validator"/> class.
       /// </summary>
       /// <param name="files">The files.</param>
@@ -71,7 +63,6 @@ namespace FlashFileProcessor.Service.Helpers
       /// </returns>
       public async Task<ValidatedResult> ProcessLineItems(string line)
       {
-         watcher = Stopwatch.StartNew();
          bool isValid = false;
          List<string> rejectReasons = new List<string>();
          ValidatedResult validatedResult = new ValidatedResult();
@@ -104,10 +95,6 @@ namespace FlashFileProcessor.Service.Helpers
          {
             _logger.LogInformation($"Error occurred in ProcessLineItems : {ex.Message}");
          }
-
-         watcher.Stop();
-
-         _logger.LogInformation($"Processed Line Items within : {watcher.ElapsedMilliseconds} milliseconds");
 
          return validatedResult;
       }
