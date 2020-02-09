@@ -65,7 +65,7 @@ namespace FlashFileProcessor.Service.Helpers
             using (StreamWriter outputFile = new StreamWriter(fileName))
             {
                foreach (string line in fileContent)
-                  await outputFile.WriteAsync(line);
+                  await outputFile.WriteLineAsync(line);
 
                isFileCreated = true;
             }
@@ -145,13 +145,11 @@ namespace FlashFileProcessor.Service.Helpers
          {
             using (StreamReader sr = new StreamReader(fileName))
             {
-               String line = string.Empty;
+               string line = string.Empty;
 
                while ((line = sr.ReadLine()) != null)
                {
-                  string[] parts = line.Split(',');
-
-                  ValidatedResult validateResult = await _validator.ProcessLineItems(parts);
+                  ValidatedResult validateResult = await _validator.ProcessLineItems(line);
 
                   if (validateResult.IsValid)
                   {

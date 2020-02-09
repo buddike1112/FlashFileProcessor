@@ -60,11 +60,12 @@ namespace FlashFileProcessor.Service.Helpers
       /// <returns>
       /// ValidatedResult
       /// </returns>
-      public async Task<ValidatedResult> ProcessLineItems(string[] lineItems)
+      public async Task<ValidatedResult> ProcessLineItems(string line)
       {
          bool isValid = false;
          List<string> rejectReasons = new List<string>();
          ValidatedResult validatedResult = new ValidatedResult();
+         string[] lineItems = line.Split(',');
 
          try
          {
@@ -80,12 +81,12 @@ namespace FlashFileProcessor.Service.Helpers
 
             if (rejectReasons.Count == 0)
             {
-               validatedResult.Content = string.Join(",", lineItems);
+               validatedResult.Content = line;
                validatedResult.IsValid = true;
             }
             else
             {
-               validatedResult.Content = string.Concat(string.Join(",", lineItems), ",", string.Join(",", rejectReasons));
+               validatedResult.Content = string.Concat(line, ",", string.Join(",", rejectReasons));
                validatedResult.IsValid = false;
             }
          }

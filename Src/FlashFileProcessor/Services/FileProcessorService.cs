@@ -90,7 +90,7 @@ namespace FlashFileProcessor.Service.Services
             }
             else
             {
-               _logger.LogInformation("Waiting for Campaign File for today!");
+               _logger.LogInformation("Waiting for Campaign Files for today!");
             }
          }
          catch (Exception ex)

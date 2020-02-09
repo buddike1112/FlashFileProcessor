@@ -16,7 +16,7 @@ namespace FlashFileProcessor.Service.Interfaces
       /// </summary>
       /// <param name="lineItems">This method will process each field entry agains the rule being configured.</param>
       /// <returns>ValidatedResult</returns>
-      Task<ValidatedResult> ProcessLineItems(string[] lineItems);
+      Task<ValidatedResult> ProcessLineItems(string line);
 
       /// <summary>
       /// Validates the specific input with appropriate regular expression.
