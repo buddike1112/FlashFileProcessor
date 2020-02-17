@@ -6,10 +6,12 @@ using FlashFileProcessor.Service.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using Topshelf.Extensions.Hosting;
+using Topshelf.Runtime;
 
 namespace FlashFileProcessor
 {
@@ -19,10 +21,27 @@ namespace FlashFileProcessor
       /// <param name="args">The arguments.</param>
       private static void Main(string[] args)
       {
+         //Acquiring the environment
+         var hostingEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+         string settingsFile = string.Empty;
+
+         if (hostingEnvironment.Equals(Environments.Production))
+         {
+            settingsFile = $"appsettings.prod.json";
+         }
+         else if (hostingEnvironment.Equals(Environments.Staging))
+         {
+            settingsFile = $"appsettings.stage.json";
+         }
+         else
+         {
+            settingsFile = $"appsettings.json";
+         }
+
          // Use appsettings json file from root to read configurations
          var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile(settingsFile, optional: true)
                 .Build();
 
          // Inject dependencies we are using withing the hosted service
@@ -36,7 +55,7 @@ namespace FlashFileProcessor
                   logging.AddConsole();
                });
 
-               services.Configure<FilesOptions>(config.GetSection("files"));
+               services.Configure<CustomersOptions>(config.GetSection("customers"));
                services.Configure<ProfilesOptions>(config.GetSection("profiles"));
                services.AddTransient<IRuleProcessor, RuleProcessor>();
                services.AddTransient<IValidator, Validator>();

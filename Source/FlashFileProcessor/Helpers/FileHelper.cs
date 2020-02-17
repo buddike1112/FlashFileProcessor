@@ -27,9 +27,9 @@ namespace FlashFileProcessor.Service.Helpers
       public IValidator _validator { get; set; }
 
       /// <summary>
-      /// The files options
+      /// The customers options
       /// </summary>
-      private FilesOptions filesOptions;
+      private CustomersOptions customersOptions;
 
       /// <summary>
       /// The logger
@@ -47,12 +47,12 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// Initializes a new instance of the <see cref="FileHelper"/> class.
       /// </summary>
-      /// <param name="files">The files.</param>
+      /// <param name="customers">The customerss.</param>
       /// <param name="validator">The validator.</param>
-      public FileHelper(IOptionsMonitor<FilesOptions> files, IValidator validator, ILogger<FileHelper> logger)
+      public FileHelper(IOptionsMonitor<CustomersOptions> customers, IValidator validator, ILogger<FileHelper> logger)
       {
          _validator = validator;
-         filesOptions = files.CurrentValue;
+         customersOptions = customers.CurrentValue;
          _logger = logger;
       }
 

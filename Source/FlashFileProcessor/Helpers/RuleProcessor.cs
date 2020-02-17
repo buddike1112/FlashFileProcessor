@@ -20,7 +20,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The files options to use
       /// </summary>
-      private FilesOptions filesOptions;
+      private CustomersOptions customersOptions;
 
       /// <summary>
       /// The fields array
@@ -35,11 +35,11 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// Initializes a new instance of the <see cref="RuleProcessor"/> class.
       /// </summary>
-      /// <param name="files">The files.</param>
-      public RuleProcessor(IOptionsMonitor<FilesOptions> files, ILogger<RuleProcessor> logger)
+      /// <param name="files">The customers.</param>
+      public RuleProcessor(IOptionsMonitor<CustomersOptions> files, ILogger<RuleProcessor> logger)
       {
-         filesOptions = files.CurrentValue;
-         fieldsArray = filesOptions.Columns;
+         customersOptions = files.CurrentValue;
+         fieldsArray = customersOptions.Columns;
          _logger = logger;
       }
 

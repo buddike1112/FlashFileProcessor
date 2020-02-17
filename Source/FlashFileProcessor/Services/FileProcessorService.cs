@@ -16,9 +16,9 @@ namespace FlashFileProcessor.Service.Services
    public class FileProcessorService : IFileProcessorService
    {
       /// <summary>
-      /// The files options
+      /// The customers options
       /// </summary>
-      private FilesOptions filesOptions;
+      private CustomersOptions customersOptions;
 
       /// <summary>
       /// The logger
@@ -33,11 +33,11 @@ namespace FlashFileProcessor.Service.Services
       /// <summary>
       /// Initializes a new instance of the <see cref="FileProcessorService"/> class.
       /// </summary>
-      /// <param name="files">The files.</param>
+      /// <param name="customers">The customers.</param>
       /// <param name="fileHelper">The file helper instance.</param>
-      public FileProcessorService(IOptionsMonitor<FilesOptions> files, IFileHelper fileHelper, ILogger<FileProcessorService> logger)
+      public FileProcessorService(IOptionsMonitor<CustomersOptions> customers, IFileHelper fileHelper, ILogger<FileProcessorService> logger)
       {
-         filesOptions = files.CurrentValue;
+         customersOptions = customers.CurrentValue;
          fileHelperInstance = fileHelper;
          _logger = logger;
       }
@@ -49,10 +49,10 @@ namespace FlashFileProcessor.Service.Services
       {
          try
          {
-            string importFile = string.Concat(filesOptions.ImportFileLocation, string.Concat(filesOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), filesOptions.Extension));
-            string processedFile = string.Concat(filesOptions.DestinationProcessedLocation, string.Concat(filesOptions.ImportFileNamePattern, "Processed_", DateTime.Now.ToString("yyyyMMdd"), filesOptions.Extension));
-            string rejectedFile = string.Concat(filesOptions.DestinationRejectLocation, string.Concat(filesOptions.ImportFileNamePattern, "Rejected_", DateTime.Now.ToString("yyyyMMdd"), filesOptions.Extension));
-            string destinationFile = string.Concat(filesOptions.DestinationArchiveLocation, string.Concat(filesOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), filesOptions.Extension));
+            string importFile = string.Concat(customersOptions.ImportFileLocation, string.Concat(customersOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
+            string processedFile = string.Concat(customersOptions.DestinationProcessedLocation, string.Concat(customersOptions.ImportFileNamePattern, "Processed_", DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
+            string rejectedFile = string.Concat(customersOptions.DestinationRejectLocation, string.Concat(customersOptions.ImportFileNamePattern, "Rejected_", DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
+            string destinationFile = string.Concat(customersOptions.DestinationArchiveLocation, string.Concat(customersOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
             bool isRejectedFileCreated = false;
             bool isProcessedFileCreated = false;
 

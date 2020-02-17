@@ -29,9 +29,9 @@ namespace FlashFileProcessor.Service.Helpers
       private readonly ILogger<Validator> _logger;
 
       /// <summary>
-      /// The files options
+      /// The customers options
       /// </summary>
-      private readonly FilesOptions filesOptions;
+      private readonly CustomersOptions customersOptions;
 
       /// <summary>
       /// Gets or sets the columns list.
@@ -46,10 +46,10 @@ namespace FlashFileProcessor.Service.Helpers
       /// </summary>
       /// <param name="files">The files.</param>
       /// <param name="ruleProcessor">The rule processor.</param>
-      public Validator(IOptionsMonitor<FilesOptions> files, IRuleProcessor ruleProcessor, ILogger<Validator> logger)
+      public Validator(IOptionsMonitor<CustomersOptions> files, IRuleProcessor ruleProcessor, ILogger<Validator> logger)
       {
-         filesOptions = files.CurrentValue;
-         ColumnsList = filesOptions.Columns;
+         customersOptions = files.CurrentValue;
+         ColumnsList = customersOptions.Columns;
          RulesList = ruleProcessor.GetRules();
          _logger = logger;
       }
