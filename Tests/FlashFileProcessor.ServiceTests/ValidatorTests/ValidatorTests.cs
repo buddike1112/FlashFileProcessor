@@ -15,18 +15,20 @@ namespace FlashFileProcessor.ServiceTests.ValidatorTests
    public class ValidatorTests
    {
       private IFixture Fixture { get; } = new Fixture();
-      public IOptionsMonitor<FilesOptions> files { get; set; }
+
+      //public IOptionsMonitor<FilesOptions> files { get; set; }
       public IRuleProcessor rules { get; set; }
+
       public IValidator validator { get; set; }
       public ILogger _logger { get; set; }
 
       public ValidatorTests()
       {
-         FilesOptions fileOptions = new FilesOptions() { Columns = new string[] { "" } };
-         files = Mock.Of<IOptionsMonitor<FilesOptions>>(_ => _.CurrentValue == fileOptions);
+         //FilesOptions fileOptions = new FilesOptions() { Columns = new string[] { "" } };
+         //files = Mock.Of<IOptionsMonitor<FilesOptions>>(_ => _.CurrentValue == fileOptions);
          _logger = Substitute.For<ILogger<Validator>>();
          rules = Substitute.For<IRuleProcessor>();
-         Fixture.Register<IValidator>(() => Substitute.For<Validator>(files, rules, _logger));
+         //Fixture.Register<IValidator>(() => Substitute.For<Validator>(files, rules, _logger));
          validator = Fixture.Create<IValidator>();
       }
 

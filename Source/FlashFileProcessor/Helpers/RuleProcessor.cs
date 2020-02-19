@@ -20,12 +20,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The files options to use
       /// </summary>
-      private CustomersOptions customersOptions;
-
-      /// <summary>
-      /// The fields array
-      /// </summary>
-      private string[] fieldsArray = new string[] { };
+      private List<CustomerOptions> customersOptions;
 
       /// <summary>
       /// The logger
@@ -35,26 +30,11 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// Initializes a new instance of the <see cref="RuleProcessor"/> class.
       /// </summary>
-      /// <param name="files">The customers.</param>
-      public RuleProcessor(IOptionsMonitor<CustomersOptions> files, ILogger<RuleProcessor> logger)
+      /// <param name="customers">The customers.</param>
+      public RuleProcessor(IOptions<CustomersOptions> customers, ILogger<RuleProcessor> logger)
       {
-         customersOptions = files.CurrentValue;
-         fieldsArray = customersOptions.Columns;
+         customersOptions = customers.Value.CustomerArray;
          _logger = logger;
-      }
-
-      /// <summary>
-      /// Gets the rule for a feld.
-      /// </summary>
-      /// <param name="fieldName">Name of the field.</param>
-      /// <returns>
-      /// Rule object
-      /// </returns>
-      public Rule GetRule(string fieldName)
-      {
-         _logger.LogInformation($"Getting Rule for field name : {fieldName}");
-         return fieldsArray.Select(x => new Rule() { Field = x.ToString().Split(";")[0], ExpressonToUse = x.ToString().Split(";")[1], RejectReason = x.ToString().Split(";")[2] })
-            .FirstOrDefault(x => string.Equals(x.Field, fieldName));
       }
 
       /// <summary>
@@ -63,11 +43,29 @@ namespace FlashFileProcessor.Service.Helpers
       /// <returns>
       /// Rule object
       /// </returns>
-      public List<Rule> GetRules()
+      public List<Rule> GetRules(string[] fieldArray, string[] validators)
       {
-         _logger.LogInformation("Getting all available rules from configurations");
-         return fieldsArray.Select(x =>
+         List<Rule> originalItems = fieldArray.Select(x =>
             new Rule() { Field = x.ToString().Split(";")[0], ExpressonToUse = x.ToString().Split(";")[1], RejectReason = x.ToString().Split(";")[2] }).ToList();
+
+         List<Rule> qualifiedRules = new List<Rule>();
+
+         for (int i = 0; i < originalItems.Count; i++)
+         {
+            if (i < validators.Length)
+            {
+               if (originalItems[i].Field.Equals(validators[i]))
+               {
+                  qualifiedRules.Add(originalItems[i]);
+               }
+            }
+            else
+            {
+               break;
+            }
+         }
+
+         return qualifiedRules;
       }
    }
 }

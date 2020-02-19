@@ -55,7 +55,7 @@ namespace FlashFileProcessor
                   logging.AddConsole();
                });
 
-               services.Configure<CustomersOptions>(config.GetSection("customers"));
+               services.Configure<CustomersOptions>(options => config.GetSection("customers").Bind(options));
                services.Configure<ProfilesOptions>(config.GetSection("profiles"));
                services.AddTransient<IRuleProcessor, RuleProcessor>();
                services.AddTransient<IValidator, Validator>();

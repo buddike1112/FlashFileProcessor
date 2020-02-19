@@ -1,4 +1,5 @@
 ﻿using FlashFileProcessor.Service.Models;
+using FlashFileProcessor.Service.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,9 +15,11 @@ namespace FlashFileProcessor.Service.Interfaces
       /// <summary>
       /// Reads the file.
       /// </summary>
-      /// <param name="filePath">The file path.</param>
-      /// <returns>ValidatedResultSet</returns>
-      Task<ValidatedResultSet> ReadFile(string filePath);
+      /// <param name="profilesOptions">The profiles options.</param>
+      /// <returns>
+      /// ValidatedResultSet
+      /// </returns>
+      Task<ValidatedResultSet> ReadFile(ProfilesOptions profilesOptions);
 
       /// <summary>
       /// Creates the file asynchronous.

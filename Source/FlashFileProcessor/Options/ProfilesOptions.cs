@@ -76,5 +76,13 @@ namespace FlashFileProcessor.Service.Options
       /// The destination processed location folder path.
       /// </value>
       public string DestinationProcessedLocation { get; set; }
+
+      /// <summary>
+      /// Gets or sets the columns.
+      /// </summary>
+      /// <value>
+      /// The columns.
+      /// </value>
+      public string[] Columns { get; set; }
    }
 }

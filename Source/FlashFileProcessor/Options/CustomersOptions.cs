@@ -11,29 +11,11 @@ namespace FlashFileProcessor.Service.Options
       }
 
       /// <summary>
-      /// Gets or sets the customer.
+      /// Gets or sets the customer array.
       /// </summary>
       /// <value>
-      /// The customer name to be use.
+      /// The customer array.
       /// </value>
-      public string CustomerName { get; set; }
-
-      /// <summary>
-      /// Gets or sets the solution key.
-      /// </summary>
-      /// <value>
-      /// The solution key if we have specific kind of solution.
-      /// </value>
-      public string SolutionKey { get; set; }
-
-      /// <summary>
-      /// Gets or sets the columns.
-      /// </summary>
-      /// <value>
-      /// The columns.
-      /// </value>
-      public string[] Columns { get; set; }
-
-      public ProfilesOptions[] Profiles { get; set; }
+      public List<CustomerOptions> CustomerArray { get; set; }
    }
 }

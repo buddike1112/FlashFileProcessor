@@ -11,16 +11,13 @@ namespace FlashFileProcessor.Service.Interfaces
    public interface IRuleProcessor
    {
       /// <summary>
-      /// Gets the rule for a feld.
-      /// </summary>
-      /// <param name="fieldName">Name of the field.</param>
-      /// <returns>Rule object</returns>
-      Rule GetRule(string fieldName);
-
-      /// <summary>
       /// Gets the rules as a collection.
       /// </summary>
-      /// <returns>Rule object</returns>
-      List<Rule> GetRules();
+      /// <param name="fieldArray">The field array.</param>
+      /// <param name="validators">The validators.</param>
+      /// <returns>
+      /// Rule object
+      /// </returns>
+      List<Rule> GetRules(string[] fieldArray, string[] validators);
    }
 }

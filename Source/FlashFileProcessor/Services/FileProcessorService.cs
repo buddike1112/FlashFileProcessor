@@ -4,6 +4,7 @@ using FlashFileProcessor.Service.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace FlashFileProcessor.Service.Services
       /// <summary>
       /// The customers options
       /// </summary>
-      private CustomersOptions customersOptions;
+      private List<CustomerOptions> customersOptions;
 
       /// <summary>
       /// The logger
@@ -35,9 +36,9 @@ namespace FlashFileProcessor.Service.Services
       /// </summary>
       /// <param name="customers">The customers.</param>
       /// <param name="fileHelper">The file helper instance.</param>
-      public FileProcessorService(IOptionsMonitor<CustomersOptions> customers, IFileHelper fileHelper, ILogger<FileProcessorService> logger)
+      public FileProcessorService(IOptions<CustomersOptions> customers, IFileHelper fileHelper, ILogger<FileProcessorService> logger)
       {
-         customersOptions = customers.CurrentValue;
+         customersOptions = customers.Value.CustomerArray;
          fileHelperInstance = fileHelper;
          _logger = logger;
       }
@@ -49,48 +50,70 @@ namespace FlashFileProcessor.Service.Services
       {
          try
          {
-            string importFile = string.Concat(customersOptions.ImportFileLocation, string.Concat(customersOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
-            string processedFile = string.Concat(customersOptions.DestinationProcessedLocation, string.Concat(customersOptions.ImportFileNamePattern, "Processed_", DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
-            string rejectedFile = string.Concat(customersOptions.DestinationRejectLocation, string.Concat(customersOptions.ImportFileNamePattern, "Rejected_", DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
-            string destinationFile = string.Concat(customersOptions.DestinationArchiveLocation, string.Concat(customersOptions.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), customersOptions.Extension));
-            bool isRejectedFileCreated = false;
-            bool isProcessedFileCreated = false;
-
-            if (File.Exists(importFile))
+            if (customersOptions != null && customersOptions.Count > 0)
             {
-               _logger.LogInformation($"Reading File : {importFile}");
-               ValidatedResultSet resultSetToWrite = await fileHelperInstance.ReadFile(importFile);
+               foreach (var customer in customersOptions)
+               {
+                  List<ProfilesOptions> profiles = customer.Profiles;
 
-               if (resultSetToWrite.SuccessItemsList.Count > 0)
-               {
-                  _logger.LogInformation($"Writing successful Items to file : {processedFile} \n");
-                  isProcessedFileCreated = await fileHelperInstance.CreateFileAsync(processedFile, resultSetToWrite.SuccessItemsList);
-               }
-               else
-               {
-                  _logger.LogInformation("No succesful records to process");
-               }
+                  if (profiles != null && profiles.Count > 0)
+                  {
+                     foreach (var profile in profiles)
+                     {
+                        string importFile = string.Concat(profile.ImportFileLocation, string.Concat(profile.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), profile.Extension));
+                        string processedFile = string.Concat(profile.DestinationProcessedLocation, string.Concat(profile.ImportFileNamePattern, "Processed_", DateTime.Now.ToString("yyyyMMdd"), profile.Extension));
+                        string rejectedFile = string.Concat(profile.DestinationRejectLocation, string.Concat(profile.ImportFileNamePattern, "Rejected_", DateTime.Now.ToString("yyyyMMdd"), profile.Extension));
+                        string destinationFile = string.Concat(profile.DestinationArchiveLocation, string.Concat(profile.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), profile.Extension));
+                        bool isRejectedFileCreated = false;
+                        bool isProcessedFileCreated = false;
 
-               if (resultSetToWrite.FailureItemsList.Count > 0)
-               {
-                  _logger.LogInformation($"\n Writing rejected Items to file : {rejectedFile} \n");
-                  isRejectedFileCreated = await fileHelperInstance.CreateFileAsync(rejectedFile, resultSetToWrite.FailureItemsList);
-               }
-               else
-               {
-                  _logger.LogInformation("No failure records to process");
-               }
+                        if (File.Exists(importFile))
+                        {
+                           _logger.LogInformation($"Reading File : {importFile}");
+                           ValidatedResultSet resultSetToWrite = await fileHelperInstance.ReadFile(profile);
 
-               if (isProcessedFileCreated && isRejectedFileCreated)
-               {
-                  _logger.LogInformation("Success and Failure records files generated moving original file to Archive.");
+                           if (resultSetToWrite.SuccessItemsList.Count > 0)
+                           {
+                              _logger.LogInformation($"Writing successful Items to file : {processedFile} \n");
+                              isProcessedFileCreated = await fileHelperInstance.CreateFileAsync(processedFile, resultSetToWrite.SuccessItemsList);
+                           }
+                           else
+                           {
+                              _logger.LogInformation("No succesful records to process");
+                           }
 
-                  await fileHelperInstance.MoveFileAsync(importFile, destinationFile);
+                           if (resultSetToWrite.FailureItemsList.Count > 0)
+                           {
+                              _logger.LogInformation($"\n Writing rejected Items to file : {rejectedFile} \n");
+                              isRejectedFileCreated = await fileHelperInstance.CreateFileAsync(rejectedFile, resultSetToWrite.FailureItemsList);
+                           }
+                           else
+                           {
+                              _logger.LogInformation("No failure records to process");
+                           }
+
+                           if (isProcessedFileCreated || isRejectedFileCreated)
+                           {
+                              _logger.LogInformation("Success and Failure records files generated. Moving original file to Archive.");
+
+                              await fileHelperInstance.MoveFileAsync(importFile, destinationFile);
+                           }
+                        }
+                        else
+                        {
+                           _logger.LogInformation("Waiting for Campaign Files for today!");
+                        }
+                     }
+                  }
+                  else
+                  {
+                     _logger.LogWarning($"Unable to find profile information for customer {customer.CustomerName} to proceed.");
+                  }
                }
             }
             else
             {
-               _logger.LogInformation("Waiting for Campaign Files for today!");
+               _logger.LogWarning("Unable to find customer information to proceed.");
             }
          }
          catch (Exception ex)

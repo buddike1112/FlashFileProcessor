@@ -156,8 +156,9 @@ namespace FlashFileProcessor.Service.Helpers
       /// </summary>
       /// <param name="fileName">Name of the file.</param>
       /// <returns>ValidatedResultSet</returns>
-      public async Task<ValidatedResultSet> ReadFile(string fileName)
+      public async Task<ValidatedResultSet> ReadFile(ProfilesOptions profile)
       {
+         string importFile = string.Concat(profile.ImportFileLocation, string.Concat(profile.ImportFileNamePattern, DateTime.Now.ToString("yyyyMMdd"), profile.Extension));
          ValidatedResultSet result = new ValidatedResultSet();
          result.SuccessItemsList = new List<string>();
          result.FailureItemsList = new List<string>();
@@ -166,13 +167,13 @@ namespace FlashFileProcessor.Service.Helpers
 
          try
          {
-            using (StreamReader sr = new StreamReader(fileName))
+            using (StreamReader sr = new StreamReader(importFile))
             {
                string line = string.Empty;
 
                while ((line = sr.ReadLine()) != null)
                {
-                  ValidatedResult validateResult = await _validator.ProcessLineItems(line);
+                  ValidatedResult validateResult = await _validator.ProcessLineItems(line, profile.Columns, profile.Validations);
 
                   if (validateResult.IsValid)
                   {
@@ -192,7 +193,7 @@ namespace FlashFileProcessor.Service.Helpers
 
          watcher.Stop();
 
-         _logger.LogInformation($"Time consumed for Reading file : {fileName} : {watcher.ElapsedMilliseconds} milliseconds");
+         _logger.LogInformation($"Time consumed for Reading file : {importFile} : {watcher.ElapsedMilliseconds} milliseconds");
 
          return result;
       }

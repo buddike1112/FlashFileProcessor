@@ -21,7 +21,7 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The rules list
       /// </summary>
-      private readonly List<Rule> RulesList = new List<Rule>();
+      private List<Rule> RulesList = new List<Rule>();
 
       /// <summary>
       /// The logger
@@ -31,26 +31,19 @@ namespace FlashFileProcessor.Service.Helpers
       /// <summary>
       /// The customers options
       /// </summary>
-      private readonly CustomersOptions customersOptions;
+      private readonly List<CustomerOptions> customersOptions;
 
-      /// <summary>
-      /// Gets or sets the columns list.
-      /// </summary>
-      /// <value>
-      /// The columns list according to the file specifications.
-      /// </value>
-      private string[] ColumnsList { get; set; }
+      public IRuleProcessor _ruleProcessor { get; set; }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="Validator"/> class.
       /// </summary>
-      /// <param name="files">The files.</param>
+      /// <param name="customers">The files.</param>
       /// <param name="ruleProcessor">The rule processor.</param>
-      public Validator(IOptionsMonitor<CustomersOptions> files, IRuleProcessor ruleProcessor, ILogger<Validator> logger)
+      public Validator(IOptions<CustomersOptions> customers, IRuleProcessor ruleProcessor, ILogger<Validator> logger)
       {
-         customersOptions = files.CurrentValue;
-         ColumnsList = customersOptions.Columns;
-         RulesList = ruleProcessor.GetRules();
+         customersOptions = customers.Value.CustomerArray;
+         _ruleProcessor = ruleProcessor;
          _logger = logger;
       }
 
@@ -61,18 +54,26 @@ namespace FlashFileProcessor.Service.Helpers
       /// <returns>
       /// ValidatedResult
       /// </returns>
-      public async Task<ValidatedResult> ProcessLineItems(string line)
+      public async Task<ValidatedResult> ProcessLineItems(string line, string[] fieldArray, string[] validators)
       {
          bool isValid = false;
          List<string> rejectReasons = new List<string>();
          ValidatedResult validatedResult = new ValidatedResult();
          string[] lineItems = line.Split(',');
+         RulesList = _ruleProcessor.GetRules(fieldArray, validators);
 
          try
          {
             for (int i = 0; i < lineItems.Length; i++)
             {
-               isValid = await ValidateAsync(RulesList[i].ExpressonToUse, lineItems[i]);
+               if (RulesList.Count > i)
+               {
+                  isValid = await ValidateAsync(RulesList[i].ExpressonToUse, lineItems[i]);
+               }
+               else
+               {
+                  isValid = true;
+               }
 
                if (!isValid)
                {
